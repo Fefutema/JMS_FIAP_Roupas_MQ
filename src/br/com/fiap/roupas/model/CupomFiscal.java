@@ -13,6 +13,8 @@ public class CupomFiscal implements Serializable {
 	private String id;
 	private String nomeArquivo;
 	private byte[] pdf;
+	private Cliente cliente;
+	private Pedido pedido;
 
 	public String getId() {
 		return id;
@@ -36,6 +38,22 @@ public class CupomFiscal implements Serializable {
 
 	public void setPdf(byte[] pdf) {
 		this.pdf = pdf;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public Pedido getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
 
 }
