@@ -9,7 +9,7 @@ import br.com.fiap.roupas.exceptions.ConnectionRefusedException;
 
 public class MQConnectionFactory {
 
-	public Connection getConnection(String url) throws ConnectionRefusedException {
+	public static Connection getConnection(String url) throws ConnectionRefusedException {
 
 		Connection connection = null;
 
