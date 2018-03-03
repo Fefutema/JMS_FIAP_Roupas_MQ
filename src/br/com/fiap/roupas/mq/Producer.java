@@ -1,33 +1,54 @@
 package br.com.fiap.roupas.mq;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
+import javax.jms.BytesMessage;
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 
-import org.apache.activemq.ActiveMQConnection;
-import org.apache.activemq.ActiveMQConnectionFactory;
+import br.com.fiap.roupas.exceptions.ConnectionRefusedException;
+import br.com.fiap.roupas.factory.MQConnectionFactory;
 
 public class Producer {
 
-	private static String url = ActiveMQConnection.DEFAULT_BROKER_URL;
-	private static String subject = "Cupons";
+	private static String SUBJECT = "Cupons";
 	
-	public static void main(String[] args) throws JMSException {
+	public static void main(String[] args) throws JMSException, ConnectionRefusedException {
 		
-		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
-		Connection connection = connectionFactory.createConnection();
+		Connection connection = MQConnectionFactory.getConnection();
+		
 		connection.start();
 		
 		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		
-		Destination destination = session.createQueue(subject);
+		Destination destination = session.createQueue(SUBJECT);
 		MessageProducer producer = session.createProducer(destination);
 		producer.setDeliveryMode(DeliveryMode.PERSISTENT);
 		
+		BytesMessage pdf = session.createBytesMessage();
+		pdf.setJMSType("BYTES");
+		
+		try {
+			pdf.writeBytes(
+					Files.readAllBytes(
+							new File("d:\\framework\\cupom-xxx.pdf").toPath()));
+			
+			pdf.setStringProperty("fileExtension", "pdf");
+            pdf.setStringProperty("fileName", "Cupom-xxx");
+			
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		producer.send(pdf);
+		
+		connection.close();
 		
 	}
 	

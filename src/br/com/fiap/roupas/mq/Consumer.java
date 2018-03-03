@@ -1,12 +1,12 @@
 package br.com.fiap.roupas.mq;
 
+import javax.jms.BytesMessage;
 import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 
 import br.com.fiap.roupas.factory.MQConnectionFactory;
 import br.com.fiap.roupas.util.ConfigUtil;
@@ -26,13 +26,14 @@ public class Consumer {
 			MessageConsumer consumer = session.createConsumer(destination);
 			Message message = consumer.receive();
 
-			if (message instanceof TextMessage) {
-				TextMessage textMessage = (TextMessage) message;
-				System.out.println("Receiving..." + textMessage.getText() + "'");
+			if (message instanceof BytesMessage) {
+				BytesMessage pdf = (BytesMessage) message;
+				
+				System.out.println("Receiving..." + pdf + "'");
 			}
 
 		} catch (Exception e) {
-			// TODO
+			System.out.println(e);
 		} finally {
 			try {
 				connection.close();
