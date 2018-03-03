@@ -1,13 +1,16 @@
 package br.com.fiap.roupas.mq;
 
-import javax.jms.BytesMessage;
+import java.io.FileOutputStream;
+
 import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
+import javax.jms.ObjectMessage;
 import javax.jms.Session;
 
+import br.com.fiap.roupas.bean.CupomFiscal;
 import br.com.fiap.roupas.factory.MQConnectionFactory;
 import br.com.fiap.roupas.util.ConfigUtil;
 
@@ -26,10 +29,17 @@ public class Consumer {
 			MessageConsumer consumer = session.createConsumer(destination);
 			Message message = consumer.receive();
 
-			if (message instanceof BytesMessage) {
-				BytesMessage pdf = (BytesMessage) message;
+			if (message instanceof ObjectMessage) {
+				ObjectMessage cupomMsg = (ObjectMessage) message;
+				Object object = cupomMsg.getObject();
 				
-				System.out.println("Receiving..." + pdf + "'");
+				CupomFiscal cupom = (CupomFiscal) object;
+				
+				try (FileOutputStream fos = new FileOutputStream("d:\\framework\\lidos\\cupom-xxx.pdf")) {
+					   fos.write(cupom.getPdf());
+					   fos.flush();
+				}
+				
 			}
 
 		} catch (Exception e) {

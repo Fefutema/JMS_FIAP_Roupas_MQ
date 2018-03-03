@@ -1,7 +1,8 @@
 package br.com.fiap.roupas.factory;
 
+import java.util.Arrays;
+
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
@@ -15,7 +16,8 @@ public class MQConnectionFactory {
 		Connection connection = null;
 		String url = MQConstants.URL;
 		try {
-			ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
+			ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(url);
+			connectionFactory.setTrustAllPackages(true);
 			connection = connectionFactory.createConnection();
 		} catch (Exception e) {
 			System.out.println("An error occured trying to connect to MQ: " + e);
