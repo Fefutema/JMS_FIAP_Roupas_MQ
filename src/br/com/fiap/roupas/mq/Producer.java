@@ -2,7 +2,6 @@ package br.com.fiap.roupas.mq;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
@@ -31,10 +30,10 @@ public class Producer {
 	@Autowired
 	private CupomFiscalService cupomFiscalService;
 
+	List<CupomFiscal> cupomFiscalList = null;
 	public boolean produce(String idPedido) {
 		
 		Connection connection = null;
-		List<CupomFiscal> cupomFiscalList = null;
 
 		try {	
 			connection = this.startConnection();
@@ -42,7 +41,7 @@ public class Producer {
 			Destination destination = createQueue(session);
 			MessageProducer producer = this.createMessageProducer(session, destination);
 			
-			this.getCuponsList(Strign idPedido);
+			this.getCuponsList(idPedido);
 			
 			for (CupomFiscal cupom : cupomFiscalList) {
 				sendCupom(session, producer, cupom);
@@ -63,13 +62,13 @@ public class Producer {
 
 	}
 
-	private void getCuponsList(String idPedido) {
+	private void getCuponsList(String idPedido) throws InvalidIDException {
 
 		if (isSearchParameter(idPedido)) {
 			cupomFiscalList = cupomFiscalService.getAllCupons(idPedido);
 		}else {
 			cupomFiscalList = Arrays.asList(Optional.ofNullable(cupomFiscalService.getCupomByID(idPedido))
-					.orElseThrow((InvalidIDException::new);
+					.orElseThrow((InvalidIDException::new)));
 		}
 		
 	}
