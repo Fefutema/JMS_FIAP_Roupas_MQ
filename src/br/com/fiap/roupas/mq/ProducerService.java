@@ -15,7 +15,8 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import br.com.fiap.roupas.constants.MQConstants;
 import br.com.fiap.roupas.exceptions.ConnectionRefusedException;
@@ -25,13 +26,14 @@ import br.com.fiap.roupas.model.CupomFiscal;
 import br.com.fiap.roupas.service.CupomFiscalService;
 import br.com.fiap.roupas.util.ConfigUtil;
 
-public class Producer {
-
-	@Autowired
-	private CupomFiscalService cupomFiscalService;
+@Service
+@Validated
+public class ProducerService {
+	
+	private CupomFiscalService cupomFiscalService = new CupomFiscalService();
 
 	List<CupomFiscal> cupomFiscalList = null;
-	public boolean produce(String idPedido) {
+	public Boolean produce(String idPedido) {
 		
 		Connection connection = null;
 
