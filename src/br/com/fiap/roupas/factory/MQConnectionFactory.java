@@ -1,7 +1,5 @@
 package br.com.fiap.roupas.factory;
 
-import java.util.Arrays;
-
 import javax.jms.Connection;
 
 import org.apache.activemq.ActiveMQConnectionFactory;

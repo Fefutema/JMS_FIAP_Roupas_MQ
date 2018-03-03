@@ -10,8 +10,8 @@ import javax.jms.MessageConsumer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 
-import br.com.fiap.roupas.bean.CupomFiscal;
 import br.com.fiap.roupas.factory.MQConnectionFactory;
+import br.com.fiap.roupas.model.CupomFiscal;
 import br.com.fiap.roupas.util.ConfigUtil;
 
 public class Consumer {
